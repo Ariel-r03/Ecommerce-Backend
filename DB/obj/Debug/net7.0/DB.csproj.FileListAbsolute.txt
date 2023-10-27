@@ -1,0 +1,14 @@
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\bin\Debug\net7.0\DB.deps.json
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\bin\Debug\net7.0\DB.runtimeconfig.json
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\bin\Debug\net7.0\DB.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\bin\Debug\net7.0\DB.pdb
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.csproj.AssemblyReference.cache
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.GeneratedMSBuildEditorConfig.editorconfig
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.AssemblyInfoInputs.cache
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.AssemblyInfo.cs
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.csproj.CoreCompileInputs.cache
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\refint\DB.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.pdb
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.genruntimeconfig.cache
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\ref\DB.dll

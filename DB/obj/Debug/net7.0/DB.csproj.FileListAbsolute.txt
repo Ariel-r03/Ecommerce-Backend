@@ -12,3 +12,4 @@ C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\r
 C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.pdb
 C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.genruntimeconfig.cache
 C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\ref\DB.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\DB\obj\Debug\net7.0\DB.sourcelink.json

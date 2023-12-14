@@ -12,14 +12,10 @@ namespace DB
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int orderID { get; set; }
-        public DateTime date { get; set; }
-        public decimal total { get;set; }
-        [ForeignKey("userID")]
-        public int userID { get; set; }
-        public virtual User User { get; set; }
-
-        public bool? status { get; set; }
+        public int OrderID { get; set; }
+        public DateTime Date { get; set; }
+        public decimal Total { get; set; }
+        public bool? Status { get; set; }
 
     }
 }

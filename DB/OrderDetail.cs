@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace DB
 {
-    [PrimaryKey(nameof(orderID), nameof(productID))]
+    [PrimaryKey(nameof(OrderID), nameof(ProductID))]
     public class OrderDetail
     {
-        public int orderID { get; set; }
-        public int productID { get; set; }
+        public int OrderID { get; set; }
+        public int ProductID { get; set; }
 
-        [ForeignKey("orderID")]
+        [ForeignKey("OrderID")]
         public virtual Order Order { get; set; }
 
-        [ForeignKey("productID")]
+        [ForeignKey("ProductID")]
         public virtual Product Product { get; set; }
 
-        public int quantity { get; set; }
-        public decimal price { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
 
-        public decimal? discount { get; set; }
+        public decimal? Discount { get; set; }
 
-        public bool? status { get; set; }
+        public bool? Status { get; set; }
 
 
     }

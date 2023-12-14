@@ -12,8 +12,8 @@ namespace DB
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int brandID { get; set; }
-        public string? name { get; set; }
-        public bool? status { get; set; }
+        public int BrandID { get; set; }
+        public string? Name { get; set; }
+        public bool? Status { get; set; }
     }
 }

@@ -12,27 +12,26 @@ namespace DB
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int productID { get; set; }
-        public string? name { get; set; }
-        public string? description { get; set; }
+        public int ProductID { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
 
-        public string? color { get; set; }
-        public string? image { get; set; }
+        public string? Color { get; set; }
+        public string? Image { get; set; }
+
         public DateTime? LaunchDate { get; set; }
-        public float price { get; set; }
+        public float Price { get; set; }
 
-        [ForeignKey("brandID")]
-        public int brandID { get; set; }
+        [ForeignKey("BrandID")]
+        public int BrandID { get; set; }
         public virtual Brand Brand { get; set; }
 
-        [ForeignKey("characteristicID")]
-        public int characteristicID { get; set; }
-        public virtual Characteristic Characteristic { get; set; }
+        public ICollection<Characteristic> Characteristics { get; set; }
 
-        [ForeignKey("categoriesID")]
-        public int categoriesID { get; set; }
+        [ForeignKey("CategoriesID")]
+        public int CategoriesID { get; set; }
         public virtual Categories Categories { get; set; }
-        public bool? status { get; set; }
+        public bool? Status { get; set; }
 
 
     }

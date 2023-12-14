@@ -13,10 +13,10 @@ namespace DB
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int characteristicID { get;set; }
-        public string? detail { get; set; }
+        public int CharacteristicID { get;set; }
+        public string? Detail { get; set; }
 
-        public bool? status { get; set; }
+        public bool? Status { get; set; }
 
     }
 }

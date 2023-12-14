@@ -12,9 +12,9 @@ namespace DB
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int categoriesID { get; set; }
+        public int CategoriesID { get; set; }
         public string? Name { get; set;}
 
-        public bool? status { get; set; }
+        public bool? Status { get; set; }
     }
 }

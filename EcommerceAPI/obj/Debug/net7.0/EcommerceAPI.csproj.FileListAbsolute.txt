@@ -262,3 +262,6 @@ C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debu
 C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debug\net7.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debug\net7.0\Azure.Storage.Blobs.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debug\net7.0\Azure.Storage.Common.dll
+C:\Ariel docs\Applicaciones Gráficas\Backend\EcommerceAPI\EcommerceAPI\bin\Debug\net7.0\System.IO.Hashing.dll

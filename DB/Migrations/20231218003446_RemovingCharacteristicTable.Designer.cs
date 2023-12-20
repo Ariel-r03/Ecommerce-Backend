@@ -4,6 +4,7 @@ using DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20231218003446_RemovingCharacteristicTable")]
+    partial class RemovingCharacteristicTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,7 +114,7 @@ namespace DB.Migrations
 
                     b.HasKey("BrandID");
 
-                    b.ToTable("Brand", (string)null);
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("DB.Categories", b =>
@@ -130,29 +133,7 @@ namespace DB.Migrations
 
                     b.HasKey("CategoriesID");
 
-                    b.ToTable("Categories", (string)null);
-                });
-
-            modelBuilder.Entity("DB.Characteristic", b =>
-                {
-                    b.Property<int>("CharacteristicID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CharacteristicID"));
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CharacteristicID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("Characteristic", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DB.Order", b =>
@@ -174,7 +155,7 @@ namespace DB.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.ToTable("Order", (string)null);
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("DB.OrderDetail", b =>
@@ -201,7 +182,7 @@ namespace DB.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderDetail", (string)null);
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("DB.Product", b =>
@@ -249,7 +230,7 @@ namespace DB.Migrations
 
                     b.HasIndex("CategoriesID");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -385,17 +366,6 @@ namespace DB.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DB.Characteristic", b =>
-                {
-                    b.HasOne("DB.Product", "Product")
-                        .WithMany("Characteristics")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("DB.OrderDetail", b =>
                 {
                     b.HasOne("DB.Order", "Order")
@@ -483,11 +453,6 @@ namespace DB.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DB.Product", b =>
-                {
-                    b.Navigation("Characteristics");
                 });
 #pragma warning restore 612, 618
         }

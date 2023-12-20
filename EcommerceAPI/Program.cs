@@ -18,6 +18,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 });
 builder.Services.AddControllers();
 
+
 //Microsoft Identity configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -48,6 +49,7 @@ builder.Services.AddAuthentication(auth =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
 
 var app = builder.Build();
 

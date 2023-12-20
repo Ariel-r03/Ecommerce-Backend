@@ -17,20 +17,21 @@ namespace DB
         public string? Description { get; set; }
 
         public string? Color { get; set; }
-        public string? Image { get; set; }
 
         public DateTime? LaunchDate { get; set; }
         public float Price { get; set; }
 
+        public int UnitsInStock { get; set; }
+
         [ForeignKey("BrandID")]
         public int BrandID { get; set; }
         public virtual Brand Brand { get; set; }
-
         public ICollection<Characteristic> Characteristics { get; set; }
 
         [ForeignKey("CategoriesID")]
         public int CategoriesID { get; set; }
         public virtual Categories Categories { get; set; }
+        public string ImagePath { get; set; }
         public bool? Status { get; set; }
 
 

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Writers;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,9 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("BackendEcommerce"));
 });
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddControllers();
 
 
@@ -33,16 +38,18 @@ builder.Services.AddAuthentication(auth =>
     auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidateActor = true,
         ValidateIssuer = true,
         ValidateAudience = true,
         RequireExpirationTime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value)),
         ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,
         ValidAudience = builder.Configuration.GetSection("Jwt:Audience").Value,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
     };
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -53,7 +60,7 @@ builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
 
 var app = builder.Build();
 
-using (var scope= app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
     context.Database.Migrate();
@@ -68,7 +75,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//SIEMPRE USAR ESE MISMO ORDEN PASASTE TODO UN DIA POR ESO, PRIMERO AUTHENTIFICATION Y LUEGO AUTHORIZATION
+app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 

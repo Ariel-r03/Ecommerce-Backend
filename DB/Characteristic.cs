@@ -15,6 +15,7 @@ namespace DB
         public int CharacteristicID { get; set; }
         public string Value { get; set; }
         public int ProductID { get; set; }
+        [ForeignKey("ProductID")]
         public virtual Product Product { get; set; }  
     }
 }

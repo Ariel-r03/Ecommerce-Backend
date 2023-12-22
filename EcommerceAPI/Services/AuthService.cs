@@ -15,19 +15,27 @@ namespace EcommerceAPI.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _config;
+        // private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        //private readonly IEmailService _emailService;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config)
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _config = config;
+            _roleManager = roleManager;
         }
-        public string GenerateTokenString(UserLoginDTO user)
+        public string GenerateTokenString(UserLoginDTO user,List<string>roles)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email,user.UserName),
-                //new Claim(ClaimTypes.Role,"Admin"),
             };
+
+           foreach (var role in roles)
+            {
+               claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value));
 
@@ -52,11 +60,13 @@ namespace EcommerceAPI.Services
             {
                 if (await _userManager.CheckPasswordAsync(identityUser, user.Password))
                 {
+                    var roles = await _userManager.GetRolesAsync(identityUser);
                     userData = new UserLoggedDTO
                     {
                         UserId = identityUser.Id,
                         UserName = identityUser.UserName,
                         FullName = identityUser.FirstName + " " + identityUser.LastName,
+                        Roles = (List<string>)roles,
                         ResultMessage = "Log in succesfully"
                     };
                     return userData;
@@ -77,18 +87,26 @@ namespace EcommerceAPI.Services
             return userData;
         }
 
-        public async Task<bool> RegisterUser(UserRegisterDTO user)
+        public async Task<bool> RegisterUser(UserRegisterDTO user, string role)
         {
-            var identityUser = new ApplicationUser
+            if (await _roleManager.RoleExistsAsync(role))
             {
-                UserName = user.UserName,
-                Email = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-            };
-            var result = await _userManager.CreateAsync(identityUser, user.Password);
+                var identityUser = new ApplicationUser
+                {
+                    UserName = user.UserName,
+                    Email = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                };
+                var result = await _userManager.CreateAsync(identityUser, user.Password);
+                await _userManager.AddToRoleAsync(identityUser, role);
+                return result.Succeeded;
+            }
 
-            return result.Succeeded;
+            return false;
+
+
+
         }
     }
 

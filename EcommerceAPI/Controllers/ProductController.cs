@@ -1,6 +1,7 @@
 ﻿using DB;
 using EcommerceAPI.Dtos;
 using EcommerceAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
@@ -20,6 +21,7 @@ namespace EcommerceAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult<Product>> Insert([FromForm] ProductRequestDTO productRequest)
         {
             try
@@ -61,8 +63,8 @@ namespace EcommerceAPI.Controllers
                     product.Characteristics = newCharacteristics;
                 }
 
-                _dbContext.Add(product);
-                _dbContext.SaveChanges();
+                 _dbContext.Add(product);
+                 _dbContext.SaveChanges();
                 return Ok(product);
             }
             catch (Exception ex)
@@ -76,7 +78,7 @@ namespace EcommerceAPI.Controllers
         {
             try
             {
-                return await _dbContext.Product.Where(product => product.Status == true).ToListAsync();
+                return await _dbContext.Product.Include(b => b.Brand).Include(c => c.Categories).Include(c => c.Characteristics).Where(product => product.Status == true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -86,6 +88,7 @@ namespace EcommerceAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Product>> Update([FromRoute] int id, [FromForm] ProductRequestDTO productRequestDTO)
         {
             try
@@ -120,6 +123,7 @@ namespace EcommerceAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int id)
         {
             try

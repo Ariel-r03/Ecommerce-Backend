@@ -23,14 +23,14 @@ namespace EcommerceAPI.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterUser(UserRegisterDTO user)
+        public async Task<IActionResult> RegisterUser(UserRegisterDTO user,string role)
         {
             if(!ValidateEmail(user))
             {
                 return BadRequest("Email is not valid");
             }
 
-            if (await _authService.RegisterUser(user))
+            if (await _authService.RegisterUser(user,role))
             {
                 return Ok("User registered");
             }
@@ -49,7 +49,7 @@ namespace EcommerceAPI.Controllers
 
             if (userData.UserName != null)
             {
-                var tokenString =  _authService.GenerateTokenString(user);
+                var tokenString = _authService.GenerateTokenString(user,userData.Roles);
                 return Ok(new {UserData = userData, Token = tokenString});
             }
             return BadRequest(userData.ResultMessage);

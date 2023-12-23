@@ -5,13 +5,128 @@
 
 trigger:
 - main
-
-pool:
-  vmImage: ubuntu-latest
-
 variables:
-  buildConfiguration: 'Release'
+    - group: Ecommerce-main
+    - group: Ecommerce-dev
+    - name: ConnectionStrings.DefaultConnection
+      value: 'Server=$(dbHost);Database=$(dbName);MultipleActiveResultSets=true;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default"'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+pool: "Our Agents"
+
+stages:
+    - stage: Stage_Build
+      displayName: Build
+      jobs:
+          - job: Job_CheckOut
+            displayName: Build Code
+            workspace:
+                clean: all
+            steps:
+                - checkout: self
+                  displayName: "Build Deployment Artifacts"
+                  clean: true
+                - task: CmdLine@2
+                  displayName: Install EF Tools
+                  inputs:
+                      script: |
+                          dotnet new tool-manifest
+                          dotnet tool install dotnet-ef --version 7.0.12
+                      workingDirectory: "$(System.DefaultWorkingDirectory)/DB/"
+
+                - task: CmdLine@2
+                  displayName: Create EF Migration Bundle
+                  inputs:
+                      script: |
+                          dotnet restore -r win-x64
+                          dotnet ef migrations bundle --framework net7.0 -r win-x64 --force --verbose --configuration Release
+                      workingDirectory: "$(System.DefaultWorkingDirectory)/DB/"
+
+                - task: DotNetCoreCLI@2
+                  displayName: "Build Application"
+                  inputs:
+                      command: "publish"
+                      publishWebProjects: true
+                      workingDirectory: "$(System.DefaultWorkingDirectory)/"
+
+                - task: CopyFiles@2
+                  displayName: "Copy Artifacts"
+                  inputs:
+                      SourceFolder: "$(System.DefaultWorkingDirectory)/"
+                      Contents: |
+                          **/*.dacpac
+                          **/*.zip
+                          $(System.DefaultWorkingDirectory)/EcommerceAPI/appsettings.json
+                          $(System.DefaultWorkingDirectory)/EcommerceAPI/efbundle.exe
+                      TargetFolder: "$(build.artifactstagingdirectory)"
+                      CleanTargetFolder: true
+                      OverWrite: true
+                      flattenFolders: true
+
+                - task: PublishPipelineArtifact@1
+                  displayName: "Publish Artifacts"
+                  inputs:
+                      targetPath: "$(Build.ArtifactStagingDirectory)"
+                      artifact: "artifacts"
+                      publishLocation: "pipeline"
+    - stage: Stage_Deploy
+      dependsOn: Stage_Build
+      condition: succeeded()
+      displayName: Deploy
+      jobs:
+          - job: Job_Deploy
+            steps:
+                - checkout: none
+                - task: DownloadPipelineArtifact@2
+                  name: DownloadDeploymentArtifacts
+                  displayName: "Download Deployment Artifacts"
+                  inputs:
+                      buildType: "current"
+                      artifactName: "artifacts"
+                      targetPath: "$(Pipeline.Workspace)"
+
+                - task: FileTransform@1
+                  inputs:
+                      folderPath: "$(Pipeline.Workspace)"
+                      fileType: "json"
+                      targetFiles: "appsettings.json"
+
+                - task: AzureCLI@2
+                  inputs:
+                      azureSubscription: "devops-emsa-dev"
+                      scriptType: "ps"
+                      scriptLocation: "inlineScript"
+                      inlineScript: "$(Pipeline.Workspace)/efbundle.exe"
+                      addSpnToEnvironment: true
+                      workingDirectory: "$(Pipeline.Workspace)"
+                - task: AzureWebApp@1
+                  displayName: "Deploy Web App"
+                  inputs:
+                      azureSubscription: "devops-ecommerce-dev"
+                      appType: "webAppLinux"
+                      appName: "SmartCell"
+                      package: "$(System.DefaultWorkingDirectory)/**/*.zip"
+                      runtimeStack: "DOTNETCORE|7.0"
+
+                - task: AzureAppServiceSettings@1
+                  inputs:
+                      azureSubscription: "devops-ecommerce-dev"
+                      appName: "SmartCell"
+                      resourceGroupName: "Rg-Ecommerce-Backend"
+                      appSettings: |
+                          [
+                            {
+                              "name": "AuthenticationMicrosoftClientId",
+                              "value": "$(msAuthClientId)"
+                            },
+                            {
+                              "name": "AuthenticationMicrosoftClientSecret",
+                              "value": "$(msAuthSecret)"
+                            }
+                          ]
+                      connectionStrings: |
+                          [
+                            {
+                              "name":"DefaultConnection",
+                              "value":"Server=$(dbHost);Database=$(dbName);Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";"
+                            }
+                          ]
